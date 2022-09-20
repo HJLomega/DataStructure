@@ -1,24 +1,25 @@
 #include <iostream>
+template <typename T2>
+class LinkNode
+{
+public:
+	LinkNode() {
+		next = NULL;
+	}
+	LinkNode(T2 e) {
+		data = e;
+		next = NULL;
+	}
+	~LinkNode() {}
+
+	//private:
+	T2 data;
+	LinkNode<T2>* next;
+};
+
 template<typename T>
 class SLList
 {	
-	template <typename T2>
-	class LinkNode
-	{
-	public:
-		LinkNode() {
-			next = NULL;
-		}
-		LinkNode(T2 e) {
-			data = e;
-			next = NULL;
-		}
-		~LinkNode(){}
-
-	//private:
-		T2 data;
-		LinkNode<T2>* next;
-	};
 
 public:
 	SLList() {
@@ -36,6 +37,18 @@ public:
 		}
 		delete head;
 		delete end;
+	}
+	void clear() {
+		LinkNode<T>* p = head->next;
+		LinkNode<T>* temp;
+		while (p != NULL) {
+			temp = p;
+			p = p->next;
+			delete temp;
+		}
+		length = 0; 
+		head->next = NULL;
+		end->next = NULL;
 	}
 	/* add a element at the end of the AList */
 	void Add(T e) {
@@ -85,15 +98,22 @@ public:
 		return -1;
 	}
 	/* insert e at index of i */
-	bool Insert(int i, T e) {
+	bool Insert(int i, T e) { 
 		if (i < 0 || i > length) {
 			return false;
 		}
-		LinkNode<T>* pre = get(i - 1);
 		LinkNode<T>* node = new LinkNode<T>(e);
+		if (length == 0) {
+			head->next = node;
+			end->next = node;
+			length += 1;
+			return true;
+		}
+		LinkNode<T>* pre = get(i - 1);
 		node->next = pre->next;
 		pre->next = node;
 		length += 1;
+		return true;
 	}
 	T Delete(int i) {
 		if (i < 0 || i >= length) {
@@ -118,8 +138,9 @@ public:
 		}
 		std::cout << "\n";
 	}
+	
 
-private:
+//private:
 	LinkNode<T>* head;
 	LinkNode<T>* end;
 	int length;
