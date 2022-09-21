@@ -19,7 +19,18 @@ void testInstert() {
 	sl.Insert(4, 100);
 	sl.DispList();
 }
+void testClear() {
+	SLList<int> sl = SLList<int>();
+	for (int i = 0; i < 6; i++) {
+		sl.Add(i);
+	}
+	sl.DispList();
+	sl.clear();
+	sl.DispList();
+	sl.Add(1);
+	sl.DispList();
+}
 int main() {
-	testInstert();
+	testClear();
 	std::cin.get();
 }

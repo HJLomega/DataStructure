@@ -1,8 +1,8 @@
-#include "../SLList/SLList.h"
+#include "../LinkList/LinkList.h"
 /* 设计一个高效算法，将顺序表的所有元素逆置，要求算法空间复杂度为O(1)。*/
 template<typename T>
-void reverse(SLList<T> &A) {
-	if (A.GetLength() <= 1) {
+void reverse(LinkList<T> &A) {
+	if (A.Getlength() <= 1) {
 		return;
 	}
 	LinkNode<T>* reversedFirst = NULL;
@@ -19,11 +19,12 @@ void reverse(SLList<T> &A) {
 
 
 void test() {
-	SLList<int> sl = SLList<int>();
+	LinkList<int> sl = LinkList<int>();
 	sl.Add(1);
 	sl.Add(2);
 	sl.Add(-62);
 	sl.Add(-72);
+	sl.Add(-752);
 	sl.DispList();
 	reverse<int>(sl);
 	sl.DispList();

@@ -1,9 +1,9 @@
-#include "../SLList/SLList.h"
+#include "../LinkList/LinkList.h"
 /* 设计一个算法，
 查找带头节点的非空单链表L中第一个最大节点（最大节点可能有多个），
 并返回该节点的逻辑序号。*/
-int findMax(SLList<int>& A) {
-	if (A.GetLength() == 0) {
+int findMax(LinkList<int>& A) {
+	if (A.Getlength() == 0) {
 		return -1;
 	}
 	LinkNode<int>* p = A.head->next;
@@ -22,12 +22,12 @@ int findMax(SLList<int>& A) {
 }
 
 void test() {
-	SLList<int> sl = SLList<int>();
+	LinkList<int> sl = LinkList<int>();
 	sl.Add(2);
 	sl.Add(1);
 	sl.Add(1);
 	sl.Add(2);
-	sl.Add(2);
+	sl.Add(5);
 	sl.Add(-62);
 	sl.Add(-72);
 	sl.DispList();
