@@ -1,9 +1,9 @@
 #include "../LinkList/DLinkList.h"
 /* 有一个非空双链表L，设计一个算法在第i个节点之前插入一个值为x的节点。*/
 template<typename T>
-void Insret(DLinkList<T> &A, int i, T x) {
+bool Insret(DLinkList<T> &A, int i, T x) {
 	if (i < 0) {
-		return;
+		return false;
 	}
 	int index = 0;
 	DLinkNode<int>* p = A.dhead;
@@ -14,17 +14,19 @@ void Insret(DLinkList<T> &A, int i, T x) {
 			node->prior = p;
 			p->next->prior = node;
 			p->next = node;
-			return;
+			return true;
 		}
 		index += 1;
 		p = p->next;
 	}
-	if (i == index) {
+	if (i == index) { // 当 i 等于链表长度时
 		DLinkNode<int>* node = new DLinkNode<int>(x);
 		node->next = p->next;
 		node->prior = p;
 		p->next = node;
+		return true;
 	}
+	return false;
 }
 void test() {
 	DLinkList<int> sl1 = DLinkList<int>();
