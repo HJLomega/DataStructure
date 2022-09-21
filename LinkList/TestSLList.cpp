@@ -1,4 +1,7 @@
-#include "SLList.h"
+//#include "SLList.h"
+#include "CLinkList.h"
+#include "DLinkList.h"
+/*
 void test() {
 	SLList<int> sl = SLList<int>();
 	for (int i = 0; i < 6; i++) {
@@ -30,7 +33,20 @@ void testClear() {
 	sl.Add(1);
 	sl.DispList();
 }
+*/
+void testCLinkLIst() {
+	CLinkList<int> sl1 = CLinkList<int>();
+	int ar1[] = { 1,1,1,1,4,4,5,5 };
+	sl1.CreateListR(ar1, 8);
+	sl1.DispList();
+}
+void testDLinkLIst() {
+	DLinkList<int> sl1 = DLinkList<int>();
+	int ar1[] = { 1,1,1,1,4,4,5,5 };
+	sl1.CreateListR(ar1, 8);
+	sl1.DispList();
+}
 int main() {
-	testClear();
+	testDLinkLIst();
 	std::cin.get();
 }
