@@ -1,5 +1,7 @@
 #include "../SLList/SLList.h"
-
+/* 有一个由整数元素构成的非空单链表A，设计一个算法，
+将其拆分成两个单链表A和B，使得A单链表中含有所有的偶数节点，
+B单链表中含有所有的奇数节点，且保持原来的相对次序。 */
 void dePart(SLList<int>& A, SLList<int>& B) {
 	LinkNode<int> *p = A.head->next;
 	if (B.GetLength() != 0) {

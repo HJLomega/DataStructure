@@ -1,5 +1,6 @@
 #include "../SLList/SLList.h"
-
+/* 某非空单链表L中所有元素为整数，
+设计一个算法将所有小于零的节点移到所有大于等于零的节点的前面。*/
 void movePositive(SLList<int>& A) {
 	LinkNode<int>* lastNegtive = A.head;
 	while (lastNegtive->next != NULL && lastNegtive->next->data < 0) {
@@ -24,7 +25,7 @@ void movePositive(SLList<int>& A) {
 }
 void test() {
 	SLList<int> sl = SLList<int>();
-	sl.Add(-1);
+	sl.Add(1);
 	sl.Add(1);
 	sl.Add(2);
 	sl.Add(-62);
