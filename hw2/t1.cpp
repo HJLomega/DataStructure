@@ -1,5 +1,4 @@
 #include <iostream>
-#include <stack>
 /*
 假设以1和O分别表示入栈和出栈操作，栈的初态和终态均为空，
 进栈和出栈的操作序列可表示为仅由1和O组成的序列。
@@ -7,18 +6,18 @@
 否则返回false（假设被判定的操作序列已存入一维数组中）
 */
 bool opLeagal(int* ar, int size) {
-	std::stack<int> s;
+	int s = 0;
 	for (int i = 0; i < size; i++) {
 		int op = ar[i];
 		if (op == 1) {
-			s.push(op);
+			s++;
 		}
 		else {
-			if (s.empty()) {
+			if (s == 0) {
 				return false;
 			}
 			else {
-				s.pop();
+				s--;
 			}
 		}
 	}
