@@ -2,33 +2,32 @@
 #include <string>
 #include <fstream>
 #include <set>
-#include <stdio.h>
 #include <vector>
 #include <string.h>
 using namespace std;
 
-
 class Book {
 public:
-	string name;
-	string author;
-	string publisher;
-	int data;
+	string name;  //书名
+	string author; //作者
+	string publisher; //出版商
+	int data;  //日期
 
-	friend istream& operator>>(istream& in, Book& book);
-	friend ostream& operator<<(ostream& out, Book& book);
-	bool operator <(const Book& rhs) const {
+	friend istream& operator>>(istream& in, Book& book);  // 重载>>
+	friend ostream& operator<<(ostream& out, const Book& book); // 重载<<
+	bool operator <(const Book& rhs) const {	// 重载 <
 		return this->name < rhs.name;
 	}
 };
-
-istream& operator>>(istream& in, Book& book) {
+istream& operator>>(istream& in,  Book& book) {
 	return in >> book.name >> book.author >> book.publisher >> book.data;
 }
-ostream& operator<<(ostream& out, Book& book) {
+ostream& operator<<(ostream& out, const Book& book) {
+	
 	if (book.name == "") {//处理空书
 		return out;
 	}
+	
 	out.setf(std::ios::left);
 	out.width(50); out << book.name;
 	out.width(20); out << book.author;
@@ -36,7 +35,6 @@ ostream& operator<<(ostream& out, Book& book) {
 	out.width(10); out << book.data ;
 	return out << "\n";
 }
-
 void read_books(set<Book> &library) {
 	ifstream f("books.txt");
 	//ifstream f("C:/Users/ljh/Desktop/books.txt");
@@ -50,7 +48,6 @@ void read_books(set<Book> &library) {
 		library.insert(temp_book);
 	}
 }
-
 void save(set<Book> &library) {
 	ofstream of("ordered.txt");
 	//ofstream of("C:/Users/ljh/Desktop/ordered.txt");
@@ -62,7 +59,6 @@ void save(set<Book> &library) {
 		of << b;
 	}
 }
-
 void sign_in(set<Book>& library) {
 	Book temp_book;
 	cin >> temp_book;
@@ -73,21 +69,7 @@ void find_book(set<Book>& library) {
 	cin >> in_name;
 	for (const Book &b : library) {
 		if (b.name.find(in_name) != string::npos) { //匹配成功
-			/*
-			char name[50] ;
-			strcpy(name, b.name.c_str());
-			char author[20];
-			strcpy(author, b.author.c_str());
-			char publisher[30];
-			strcpy(publisher, b.publisher.c_str());
-			int data = b.data;
-			printf("%50s%20s%30s%10d", name, author, publisher, data);
-			*/
-			cout.setf(std::ios::left);
-			cout.width(50); cout << b.name;
-			cout.width(20); cout << b.author;
-			cout.width(30); cout << b.publisher;
-			cout.width(10); cout << b.data << "\n";
+			cout << b;
 		}
 	}
 }

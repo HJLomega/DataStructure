@@ -1,84 +1,161 @@
-#include <iostream>
+ï»¿#include <iostream>
 #include <string>
 #include <vector>
-#include <queue>
+#include <stack>
+#include <sstream>
 using namespace std;
-//Ê÷½Úµã
+//æ ‘èŠ‚ç‚¹
 struct Node
 {
 	string value;
 	Node* left;
 	Node* right;
 };
-Node* exp2tree(queue<string>& exp) {
-	Node* tree = new Node;
-	//½âÎö×ó±í´ïÊ½
-	if (exp.front() == "(") {
-		exp.pop(); //È¥£¨
-		tree->left = exp2tree(exp);
-		exp.pop(); //È¥£©
+bool is_num(string& s) {
+	return s[0]>='0'&&s[0]<='9';
+}
+Node* exp2tree(vector<string> post_exp) {
+	stack<Node*> node_stack;
+	for (string s : post_exp) {
+		if (is_num(s)) {
+			Node* leaf = new Node;
+			leaf->left = NULL;
+			leaf->right = NULL;
+			leaf->value = s;
+			node_stack.push(leaf);
+		}
+		else {
+			Node* T1 = node_stack.top(); node_stack.pop();
+			Node* T2 = node_stack.top(); node_stack.pop();
+			Node* temp = new Node;
+			temp->left = T2;
+			temp->right = T1;
+			temp->value = s;
+			node_stack.push(temp);
+		}
 	}
-	else {
-		//Ò¶×Ó
-		Node* leaf = new Node;
-		leaf->left = NULL;
-		leaf->right = NULL;
-		leaf->value = exp.front(); exp.pop();
-		tree->left = leaf;
+	return node_stack.top();
+}
+int evaluate(Node* tree) {
+	//å¶å­
+	string& s = tree->value;
+	if (is_num(tree->value)) {
+		return stoi(tree->value);
 	}
-	//½âÎö²Ù×÷·û
-	tree->value = exp.front(); exp.pop();
-	//½âÎöÓÒ±í´ïÊ½
-	if (exp.front() == "(") {
-		exp.pop(); //È¥£¨
-		tree->right = exp2tree(exp);
-		exp.pop(); //È¥£©
+	//éå¶å­
+	if (s == "+") {
+		return evaluate(tree->left) + evaluate(tree->right);
 	}
-	else {
-		//Ò¶×Ó
-		Node* leaf = new Node;
-		leaf->left = NULL;
-		leaf->right = NULL;
-		leaf->value = exp.front(); exp.pop();
-		tree->right = leaf;
+	if (s == "-") {
+		return evaluate(tree->left) - evaluate(tree->right);
 	}
-	return tree;
+	if (s == "*") {
+		return evaluate(tree->left) * evaluate(tree->right);
+	}
+	if (s == "/") {
+		return evaluate(tree->left) / evaluate(tree->right);
+	}
+	return 0;
 }
 
-
-
-
 int main() {
-	//´Ê·¨·ÖÎö
-	queue<string> exp;
+	//è¯æ³•åˆ†æ
+	vector<string> exp;
 	char c;
 	while (cin >> c) {
 		if (c == '=') {
 			break;
 		}
-		//¶ÁÊı×Ö
-		if (c >= '0' && c <= '9') { 
+		//è¯»æ•°å­—
+		if (c >= '0' && c <= '9') {
 			string temp(1, c);
 			while (cin >> c && c >= '0' && c <= '9') {
 				temp += c;
 			}
-			exp.push(temp);
-			//ÓÉÓÚ±í´ïÊ½Ê±ÕıÈ·µÄ£¬Êı×Öºó±ØÊÇ·ûºÅ
+			exp.push_back(temp);
+			//ç”±äºè¡¨è¾¾å¼æ—¶æ­£ç¡®çš„ï¼Œæ•°å­—åå¿…æ˜¯ç¬¦å·
 			if (c == '=') {
 				break;
 			}
 			string temp2(1, c);
-			exp.push(temp2);
+			exp.push_back(temp2);
 		}
-		//¶Á·ûºÅ
+		//è¯»ç¬¦å·
 		else {
-			string temp(1,c);
-			exp.push(temp);
+			string temp(1, c);
+			exp.push_back(temp);
 		}
 
 	}
-	//½¨Ê÷
+
+	//è½¬ä¸ºåç¼€
+	vector<string> post_exp;
+	stack<string> op_stack;
+	for (string s : exp) {
+
+		if (is_num(s)) {
+			post_exp.push_back(s);
+		}
+		//å°†'('è¿›æ ˆ
+		else if (s == "(") {
+			op_stack.push(s);
+		}
+		//æ ˆä¸­'('ä»¥å‰çš„è¿ç®—ç¬¦ä¾æ¬¡å‡ºæ ˆ,å†å°†'('é€€æ ˆ
+		else if (s == ")") {
+			while (true) {
+				string temp = op_stack.top(); op_stack.pop();
+				if (temp == "(") {
+					break;
+				}
+				post_exp.push_back(temp);
+			}
+		}
+		else {
+			//è€ƒè™‘ç¬¦å·ä¼˜å…ˆçº§
+			if (op_stack.empty()) {
+				op_stack.push(s);
+			}
+			else {
+				string top = op_stack.top();
+				//è‹¥sä¼˜å…ˆçº§ä½äºtop,å‡ºæ ˆå¹¶å­˜æ”¾åˆ°post_expä¸­ç›´åˆ°è¯¥æ¡ä»¶æˆç«‹,å†å°†chè¿›æ ˆ
+				while (!(top == "(" || ((s == "*" || s == "/") && (top == "+" || top == "-")))) {
+					string temp = op_stack.top(); op_stack.pop();
+					post_exp.push_back(temp);
+					if (!op_stack.empty()) {
+						top = op_stack.top();
+					}
+					else {
+						break;
+					}
+				}
+				op_stack.push(s);
+			}
+		}
+	}
+	//å­—ç¬¦ä¸²expæ‰«æå®Œæ¯•,åˆ™é€€æ ˆçš„æ‰€æœ‰è¿ç®—ç¬¦å¹¶å­˜æ”¾åˆ°post_expä¸­
+	while (!op_stack.empty()) {
+		string temp = op_stack.top(); op_stack.pop();
+		post_exp.push_back(temp);
+	}
+
+	//å»ºæ ‘
 	Node* tree;
-	tree = exp2tree(exp);
-	int a = 5;
+	tree = exp2tree(post_exp);
+	//è¾“å‡º
+	if (tree != NULL) {
+		cout << tree->value << " ";
+	}
+	if (tree->left != NULL) {
+		cout << tree->left->value << " ";
+	}
+	if (tree->right != NULL) {
+		cout << tree->right->value << " ";
+	}
+	cout << "\n";
+	//è®¡ç®—
+	cout << evaluate(tree);
+
 }
+
+
+
