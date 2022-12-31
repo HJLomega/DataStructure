@@ -9,12 +9,15 @@ typedef struct node {
 } Linknode, * Link;
 void InsertSort(Link L) {
     Link p, q, r, u;
-    p = L->next;     /*(1)*/;
-    while (/*(2)*/p) {
+    p = L->next;     /*(1)*/L->next=nullptr;
+    while (/*(2)*/p!= nullptr) {
         r = L;  q = L->next;
-        while (/*(3)*/ && q->data <= p->data) {  
+        while (/*(3)*/ q!=nullptr && q->data <= p->data) {  
             r = q;   q = q->next;
         }
-        u = p->next;      /*(4)*/;     /*(5)*/; p = u;
+        u = p->next;      /*(4)*/p->next = q;     /*(5)*/r->next = p; p = u;
     }
 }
+
+
+
