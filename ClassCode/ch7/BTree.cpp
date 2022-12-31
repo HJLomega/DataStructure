@@ -30,7 +30,7 @@ public:											//为了简单，所有成员设计为公有属性
 		DestroyBTree(r);						//调用DestroyBTree()函数
 		r=NULL;
 	}
-	DestroyBTree(BTNode *b)						//释放所有的结点空间
+	void DestroyBTree(BTNode *b)						//释放所有的结点空间
 	{
 		if (b!=NULL)
 		{
